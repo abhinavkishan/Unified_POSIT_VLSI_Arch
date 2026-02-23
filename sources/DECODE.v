@@ -27,8 +27,12 @@ module DECODE(
 
     );
     wire [15:0] exp;
-    wire [23:0] fraction;
-    wire signed [23:0] sf1;
+    wire [31:0] fraction;
+    wire signed [31:0] sf1;
+    wire [31:0] v2c;
+    wire [31:0] vi;
     FieldExtract FE(.V(V),.exp(exp),.fraction(fraction),.pres(ctrl[5:4]),.vec(ctrl[3]));
     VectorSubtract VS(.exp(exp),.pres(ctrl[5:4]),.vec(ctrl[3]),.sf(sf1));
+    Vector2sComp V2C(.vin(V),.p_m(ctrl[5:4]),.vout(v2c));
+    vector_inverter vinv(.vin(v2c),.p_m(ctrl[5:4]),.vout(vi));
 endmodule
