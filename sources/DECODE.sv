@@ -13,11 +13,14 @@ module DECODE (
     logic [31:0]        vi;
     logic [19:0]        zc;
     logic [31:0]        vrs;
-
+    logic [31:0]        frapos;
+    logic [31:0]        exppos;
+    logic signed [19:0] k_out;
+    logic signed [19:0] k_alignout;
+    
     FieldExtract FE (
         .V(V),
         .pres(ctrl[5:4]),
-        .vec(ctrl[3]),
         .exp(exp),
         .fraction(fraction)
     );
@@ -25,7 +28,6 @@ module DECODE (
     VectorSubtract VS (
         .exp(exp),
         .pres(ctrl[5:4]),
-        .vec(ctrl[3]),
         .sf(sf1)
     );
 
@@ -47,13 +49,37 @@ module DECODE (
         .zero_count(zc)
     );
 
-    vector_regime_shifter RS (
+    regimeShifter RS (
         .vin(v2c),
         .zero_count(zc),
         .p_m(ctrl[5:4]),
         .vout(vrs)
     );
+    ExponentShifter ES(
+       .vin(vrs),
+       .es(ctrl[3:2]),
+       .pres(ctrl[5:4]),
+       .fraction(frapos),
+       .exp(exppos)
+    );
+    vector_adder (
+        .vin(v2c),
+        .zero_count(zc),
+        .p_m(ctrl[5:4]),
+        .k_out(k_out)
+    );
+    k_align_shifter (
+        .k_in(k_out),
+        .precision_mode(ctrl[5:4]),
+        .es(ctrl[3:2]),
+        .k_aligned(k_alignout)
+    );
+    logic signed [31:0] expadd;
 
-    assign Vr = vrs;
+    assign expadd = exppos+k_alignout;
+    assign frapos[31] = 1'b1;
+     
+
+
 
 endmodule
