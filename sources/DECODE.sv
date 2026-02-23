@@ -3,7 +3,9 @@
 module DECODE (
     input  logic [31:0] V,
     input  logic [5:0]  ctrl,
-    output logic [31:0] Vr
+    output logic [31:0] f,
+    output logic [31:0] sf,
+    output logic [3:0] s
 );
 
     logic [15:0]        exp;
@@ -78,8 +80,10 @@ module DECODE (
 
     assign expadd = exppos+k_alignout;
     assign frapos[31] = 1'b1;
-     
-
+    assign s={V[31],V[23],V[15],V[7]};
+    assign sf = ctrl[1] ? sf1 : expadd;
+    assign f = ctrl[1] ? fraction : frapos;
+    
 
 
 endmodule
