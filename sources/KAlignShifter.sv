@@ -1,38 +1,41 @@
+`timescale 1ns / 1ps
+
 module k_align_shifter (
-    input  wire signed [19:0] k_in,   
-    input  wire [1:0] precision_mode,
-    input  wire [1:0] es,             
-    output reg  signed [19:0] k_aligned
+    input  logic signed [19:0] k_in,
+    input  logic [1:0]         precision_mode,
+    input  logic [1:0]         es,
+    output logic signed [19:0] k_aligned
 );
 
-integer i;
-reg signed [4:0] k_lane;
+always_comb begin
+    k_aligned = '0;
 
-always @(*) begin
-    k_aligned = 20'd0;
+    unique case (precision_mode)
 
-    case (precision_mode)
-        2'b00: begin
-            for (i = 0; i < 4; i = i + 1) begin
-                k_lane = k_in[i*5 +: 5];
-                k_aligned[i*5 +: 5] = k_lane <<< es;
-            end
+    2'b00: begin
+        for (int i = 0; i < 4; i++) begin
+            logic signed [4:0] k_lane;
+            k_lane = k_in[i*5 +: 5];
+            k_aligned[i*5 +: 5] = k_lane <<< es;
         end
+    end
 
-        2'b01: begin
-            k_lane = k_in[4:0];
-            k_aligned[4:0] = k_lane <<< es;
+    2'b01: begin
+        logic signed [4:0] k_lane;
 
-            k_lane = k_in[9:5];
-            k_aligned[9:5] = k_lane <<< es;
-        end
+        k_lane = k_in[4:0];
+        k_aligned[4:0] = k_lane <<< es;
 
-        2'b10: begin
-            k_lane = k_in[4:0];
-            k_aligned[4:0] = k_lane <<< es;
-        end
+        k_lane = k_in[9:5];
+        k_aligned[9:5] = k_lane <<< es;
+    end
 
-        default: k_aligned = 20'd0;
+    2'b10: begin
+        logic signed [4:0] k_lane;
+
+        k_lane = k_in[4:0];
+        k_aligned[4:0] = k_lane <<< es;
+    end
 
     endcase
 end
