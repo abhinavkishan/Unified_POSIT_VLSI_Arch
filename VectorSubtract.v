@@ -3,7 +3,7 @@
 module VectorSubtract(
     input  [15:0] exp,
     input  [1:0]  pres,   // 00=8bit, 01=16bit, 10=32bit
-    input         vec,    // vector enable
+    input         vec,   
     output signed [31:0] sf
 );
 
