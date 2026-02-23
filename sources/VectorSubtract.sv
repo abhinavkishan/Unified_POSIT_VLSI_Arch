@@ -1,15 +1,16 @@
-`timescale 1ns/1ps 
-module VectorSubtract(
-    input  [15:0] exp,
-    input  [1:0]  pres,
-    input         vec,
-    output reg signed [31:0] sf
+`timescale 1ns / 1ps
+
+module VectorSubtract (
+    input  logic [15:0] exp,
+    input  logic [1:0]  pres,
+    input  logic        vec,
+    output logic signed [31:0] sf
 );
 
-always @(*) begin
-    sf = 32'sd0;
+always_comb begin
+    sf = '0;
 
-    case (pres)
+    unique case (pres)
 
     2'b00: begin
         if (vec) begin
@@ -21,8 +22,10 @@ always @(*) begin
             };
         end
         else begin
-            sf = {24'sd0,
-                  ($signed({4'b0, exp[3:0]}) - 8'sd7)};
+            sf = {
+                24'sd0,
+                ($signed({4'b0, exp[3:0]}) - 8'sd7)
+            };
         end
     end
 
@@ -34,8 +37,10 @@ always @(*) begin
             };
         end
         else begin
-            sf = {16'sd0,
-                  ($signed({11'b0, exp[4:0]}) - 16'sd15)};
+            sf = {
+                16'sd0,
+                ($signed({11'b0, exp[4:0]}) - 16'sd15)
+            };
         end
     end
 
