@@ -23,14 +23,13 @@
 module Vector2sComp(
     input  wire [31:0] vin,
     input  wire [1:0]  p_m,
-    output wire [31:0] vout
+    output reg [31:0] vout
 );
-
+ integer i;
 always @(*) begin
     case (p_m)
-
     2'b00: begin
-        integer i;
+       
         for (i = 0; i < 4; i = i + 1) begin
             if (vin[i*8 + 7])
                 vout[i*8 +: 8] = (~vin[i*8 +: 8]) + 8'd1;
