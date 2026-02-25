@@ -13,7 +13,7 @@ always_comb begin
 
     2'b00: begin
         for (int i = 0; i < 4; i++) begin
-           
+           count = 0;
 
             for (int j = i*8 + 6; j >= i*8; j--) begin
                 if (vin[j] == 1'b0)
