@@ -13,6 +13,7 @@ always_comb begin
 
     2'b00: begin
         for (int i = 0; i < 4; i++) begin
+           
            count = 0;
 
             for (int j = i*8 + 6; j >= i*8; j--) begin
@@ -34,7 +35,7 @@ always_comb begin
             else
                 break;
         end
-        zero_count[4:0] = count[4:0];
+        zero_count[9:0] = count;
 
         count = 0;
         for (int j = 30; j >= 16; j--) begin
@@ -43,7 +44,7 @@ always_comb begin
             else
                 break;
         end
-        zero_count[9:5] = count[4:0];
+        zero_count[19:10] = count;
     end
 
     2'b10: begin
@@ -54,7 +55,7 @@ always_comb begin
             else
                 break;
         end
-        zero_count[4:0] = count[4:0];
+        zero_count = count;
     end
 
     endcase

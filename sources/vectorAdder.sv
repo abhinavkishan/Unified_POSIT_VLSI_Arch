@@ -27,35 +27,33 @@ always_comb begin
     end
 
     2'b01: begin
-        logic signed [4:0] count;
+        logic signed [9:0] count;
         logic regime_bit;
 
-        count      = zero_count[4:0];
+        count      = zero_count[9:0];
         regime_bit = vin[14];
-        k_out[4:0] =
-            regime_bit ? (count - 5'sd1)
+        k_out[9:0] =
+            regime_bit ? (count - 10'sd1)
                        : (-count);
 
-        count      = zero_count[9:5];
+        count      = zero_count[19:10];
         regime_bit = vin[30];
-        k_out[9:5] =
-            regime_bit ? (count - 5'sd1)
+        k_out[19:10] =
+            regime_bit ? (count - 10'sd1)
                        : (-count);
     end
 
     2'b10: begin
-        logic signed [4:0] count;
+        logic signed [19:0] count;
         logic regime_bit;
 
-        count      = zero_count[4:0];
+        count      = zero_count;
         regime_bit = vin[30];
 
-        k_out[4:0] =
-            regime_bit ? (count - 5'sd1)
+        k_out =
+            regime_bit ? (count - 20'sd1)
                        : (-count);
     end
 
     endcase
 end
-
-endmodule
