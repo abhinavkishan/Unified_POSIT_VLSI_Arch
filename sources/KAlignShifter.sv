@@ -14,27 +14,22 @@ always_comb begin
 
     2'b00: begin
         for (int i = 0; i < 4; i++) begin
-            logic signed [7:0] k_lane;
-            k_lane = k_in[i*5 +: 5];
-            k_aligned[i*8 +: 8] = k_lane <<< es;
+            k_aligned[i*8 +: 8] =
+                ({{3{k_in[i*5+4]}}, k_in[i*5 +: 5]}) <<< es;
         end
     end
 
     2'b01: begin
-        logic signed [15:0] k_lane;
+        k_aligned[15:0]  =
+            ({{6{k_in[9]}},  k_in[9:0]}) <<< es;
 
-        k_lane = k_in[9:0];
-        k_aligned[15:0] = k_lane <<< es;
-
-        k_lane = k_in[19:10];
-        k_aligned[31:16] = k_lane <<< es;
+        k_aligned[31:16] =
+            ({{6{k_in[19]}}, k_in[19:10]}) <<< es;
     end
 
     2'b10: begin
-        logic signed [31:0] k_lane;
-
-        k_lane = k_in[19:0];
-        k_aligned = k_lane <<< es;
+       k_aligned =
+            ({{12{k_in[19]}}, k_in}) <<< es;
     end
 
     endcase

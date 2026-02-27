@@ -18,7 +18,7 @@ module DECODE (
     logic [31:0]        frapos;
     logic [31:0]        exppos;
     logic signed [19:0] k_out;
-    logic signed [19:0] k_alignout;
+    logic signed [31:0] k_alignout;
     
     FieldExtract FE (
         .V(V),
@@ -64,13 +64,13 @@ module DECODE (
        .fraction(frapos),
        .exp(exppos)
     );
-    vector_adder (
+    vector_adder VA(
         .vin(v2c),
         .zero_count(zc),
         .p_m(ctrl[5:4]),
         .k_out(k_out)
     );
-    k_align_shifter (
+    k_align_shifter KAS(
         .k_in(k_out),
         .precision_mode(ctrl[5:4]),
         .es(ctrl[3:2]),
