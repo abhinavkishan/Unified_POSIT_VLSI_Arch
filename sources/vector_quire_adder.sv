@@ -3,14 +3,19 @@ module vector_quire_adder #(
 )(
     input  logic [QUIRE_WIDTH-1:0] q1,
     input  logic [QUIRE_WIDTH-1:0] q0,
+    input  logic [3:0]             sticky,
     input  logic [1:0]             pres,
 
-    output logic [QUIRE_WIDTH-1:0] q_out
+    output logic [QUIRE_WIDTH-1:0] q_out,
+    output logic [7:0]             flags
+
 );
 
+logic overflow;
 always_comb begin
 
     q_out = '0;
+    overflow = 0;
 
     case(pres)
 
@@ -41,6 +46,10 @@ always_comb begin
 
     endcase
 
+    overflow = ($signed(q1) > 0 && $signed(q0) > 0 && $signed(q_out) < 0) ||
+               ($signed(q1) < 0 && $signed(q0) < 0 && $signed(q_out) > 0);
+
+    flags = {overflow, sticky};
 end
 
 endmodule

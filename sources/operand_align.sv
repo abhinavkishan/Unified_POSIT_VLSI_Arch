@@ -13,6 +13,7 @@ module operand_align #(
 
     output logic [QUIRE_WIDTH-1:0] q1,
     output logic [QUIRE_WIDTH-1:0] q0,
+    output logic [3:0]             sticky,
     output logic [SF_WIDTH-1:0]    sfq_new
 );
 
@@ -38,11 +39,13 @@ always_comb begin
                 if(cmp[i]) begin
                     q1[i*32 +: 32] = quire_p[i*32 +: 32];
                     q0[i*32 +: 32] = quire_s[i*32 +: 32] >> shift;
+                    sticky[i] = |(quire_s[i*32 +: 32] & ((1<<shift)-1));
                     sfq_new[i*8 +: 8] = sp;
                 end
                 else begin
                     q1[i*32 +: 32] = quire_s[i*32 +: 32];
                     q0[i*32 +: 32] = quire_p[i*32 +: 32] >> (-shift);
+                    sticky[i] = |(quire_p[i*32 +: 32] & ((1<<(-shift))-1));
                     sfq_new[i*8 +: 8] = ss;
                 end
 
@@ -61,11 +64,13 @@ always_comb begin
                 if(cmp[i*2]) begin
                     q1[i*64 +: 64] = quire_p[i*64 +: 64];
                     q0[i*64 +: 64] = quire_s[i*64 +: 64] >> shift;
+                    sticky[i*2] = |(quire_s[i*64 +: 64] & ((1<<shift)-1));
                     sfq_new[i*16 +: 16] = sp;
                 end
                 else begin
                     q1[i*64 +: 64] = quire_s[i*64 +: 64];
                     q0[i*64 +: 64] = quire_p[i*64 +: 64] >> (-shift);
+                    sticky[i*2] = |(quire_p[i*64 +: 64] & ((1<<(-shift))-1));
                     sfq_new[i*16 +: 16] = ss;
                 end
 
@@ -83,11 +88,13 @@ always_comb begin
             if(cmp[0]) begin
                 q1 = quire_p;
                 q0 = quire_s >> shift;
+                sticky[0] = |(quire_s & ((1<<shift)-1));
                 sfq_new = sp;
             end
             else begin
                 q1 = quire_s;
                 q0 = quire_p >> (-shift);
+                sticky[0] = |(quire_p & ((1<<(-shift))-1));
                 sfq_new = ss;
             end
 
