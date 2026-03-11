@@ -26,14 +26,14 @@ always_comb begin
 
         // 1 : Vr = Va + Vc
         3'b001: begin
-            quire_s = quire_r;
-            sfq_s   = sfq_r;
+            quire_s = quire_c;
+            sfq_s   = sfq_c;
         end
 
         // 2 : Vr = Va - Vc
         3'b010: begin
-            quire_s = -quire_r;
-            sfq_s   = sfq_r;
+            quire_s = quire_c;
+            sfq_s   = sfq_c;
         end
 
         // 3 : Vr = Va*Vb + Vc
@@ -44,20 +44,20 @@ always_comb begin
 
         // 4 : Vr = Va*Vb - Vc
         3'b100: begin
-            quire_s = -quire_r;
+            quire_s = quire_c;
+            sfq_s   = sfq_c;
+        end
+
+        // 5 : Vr += Va*Vb 
+        3'b101: begin
+            quire_s = quire_r;
             sfq_s   = sfq_r;
         end
 
-        // 5 : Vr = -Va*Vb + Vc
-        3'b101: begin
-            quire_s = -quire_c;
-            sfq_s   = sfq_c;
-        end
-
-        // 6 : Vr = -Va*Vb
+        // 6 : Vr -= Va*Vb
         3'b110: begin
-            quire_s = -quire_c;
-            sfq_s   = sfq_c;
+            quire_s = quire_r;
+            sfq_s   = sfq_r;
         end
 
         default: begin
